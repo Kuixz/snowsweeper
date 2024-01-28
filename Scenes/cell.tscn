@@ -1,0 +1,21 @@
+[gd_scene load_steps=6 format=3 uid="uid://u5ucf73fqtgv"]
+
+[ext_resource type="Script" path="res://Scripts/Cell_Script.gd" id="1_fklmx"]
+[ext_resource type="Resource" uid="uid://ql01p5n61dcu" path="res://Resources/CellKeeper.tres" id="2_7pt6a"]
+[ext_resource type="Texture2D" uid="uid://bl8abcjgskmeh" path="res://Assets/TileUnknown.png" id="2_514k7"]
+[ext_resource type="Resource" uid="uid://dka5mmg2kldvi" path="res://Resources/CellSharedResources.tres" id="3_a0g2b"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ks02c"]
+
+[node name="Cell" type="Area2D"]
+script = ExtResource("1_fklmx")
+keeper = ExtResource("2_7pt6a")
+res = ExtResource("3_a0g2b")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_514k7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ks02c")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
