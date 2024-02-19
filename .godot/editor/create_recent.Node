@@ -1,7 +1,12 @@
-CollisionShape2D
-Sprite2D
-Area2D
-Camera2D
-Node2D
+Label
+TextureRect
+CanvasLayer
+Control
 Node
+HBoxContainer
+Camera2D
+Sprite2D
+CollisionShape2D
+Area2D
+Node2D
 TileMap

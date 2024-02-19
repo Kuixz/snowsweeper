@@ -1,26 +1,29 @@
-extends Area2D
+extends Sprite2D
 class_name Cell
 
 #signal click(s)
 #signal mouse_entered_cell(s)
 
-const SIZE: int = 4
-var cellX: int = 0
-var cellY: int = 0
+#const SIZE: int = 4
+var cellXY: Vector2i
+var is_mine: bool
+var is_revealed: bool = false
+var is_flagged: bool = false
+var resource: int = -1
 
-var data: CellData
+#var data: CellData
 
-@export var keeper: CellKeeper
+#@export var keeper: CellKeeper
 @export var res: CellSharedResources
 
 # Called when the node enters the scene tree for the first time.
-func init(x:int, y:int):
-	cellX = x
-	cellY = y
+func init(loc: Vector2i):
+	cellXY = loc
+	is_mine = randf() < 0.25  # 0.15
 	scale = Vector2(res.SIZE, res.SIZE)
-	position = Vector2(x * 16 * res.SIZE, y * 16 * res.SIZE)
+	position = Vector2(loc.x * 16 * res.SIZE, loc.y * 16 * res.SIZE)
 	
-	data = keeper.get_cell(x, y)
+#	data = keeper.get_cell(x, y)
 #	$Sprite2D.texture = resources.textures[data.]
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,4 +38,19 @@ func init(x:int, y:int):
 #		click.emit(self)# Replace with function body.
 
 func set_costume(costume_name:String):
-	$Sprite2D.texture = res.textures[costume_name]
+	texture = res.textures[costume_name]
+
+func explode():
+	is_revealed = true
+	set_costume('mine')
+
+func openTo(count: int):
+	if resource != -1: return
+	is_revealed = true
+	resource = count
+	if count == 0: set_costume('open')
+	else: set_costume(str(count)) # Technically not necessary, if i remove the typecheck on the other side...
+
+func set_flagged(f: bool):
+	is_flagged = f
+	set_costume('flag' if f else 'closed')

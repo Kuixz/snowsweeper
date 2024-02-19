@@ -1,3 +1,5 @@
+res://Scenes/town.tscn
+res://Scripts/Town.gd
 res://Scenes/grid.tscn
-res://Scripts/Grid.gd
 res://Scenes/cell.tscn
+res://Resources/Stylus.gd
