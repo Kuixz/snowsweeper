@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="Stylus" load_steps=2 format=3 uid="uid://pivt3f8oic6o"]
+
+[ext_resource type="Script" path="res://Resources/Stylus.gd" id="1_w6n8w"]
+
+[resource]
+script = ExtResource("1_w6n8w")
