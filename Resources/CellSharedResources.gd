@@ -4,9 +4,10 @@ class_name CellSharedResources
 const SIZE = 4
 var textures = {
 	'closed': preload('res://Assets/TileUnknown.png'),
-	'open': preload('res://Assets/TileEmpty.png'),
+	# 'open': preload('res://Assets/TileEmpty.png'),
 	'mine': preload('res://Assets/TileExploded.png'),
 	'flag': preload('res://Assets/TileFlag.png'),
+	'0': preload('res://Assets/TileEmpty.png'),
 	'1': preload('res://Assets/Tile1.png'),
 	'2': preload('res://Assets/Tile2.png'),
 	'3': preload('res://Assets/Tile3.png'),

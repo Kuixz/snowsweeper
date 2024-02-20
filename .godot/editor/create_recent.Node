@@ -1,8 +1,8 @@
+Node
 Label
 TextureRect
 CanvasLayer
 Control
-Node
 HBoxContainer
 Camera2D
 Sprite2D

@@ -1,37 +1,7 @@
 extends Node
 class_name Grid
 
-signal explosion
-
 enum CellState { UNKNOWN, EMPTY, MINE }
-#var sample_board = {
-#	Vector2i(-2,-2): CellState.MINE,
-#	Vector2i(-2,-1): CellState.MINE,
-#	Vector2i(-2,0): CellState.MINE,
-#	Vector2i(-2,1): CellState.MINE,
-#	Vector2i(-2,2): CellState.MINE,
-#	Vector2i(-1,2): CellState.MINE,
-#	Vector2i(0,2): CellState.MINE,
-#	Vector2i(1,2): CellState.MINE,
-#	Vector2i(2,2): CellState.MINE,
-#	Vector2i(2,1): CellState.MINE,
-#	Vector2i(2,0): CellState.MINE,
-#	Vector2i(2,-1): CellState.MINE,
-#	Vector2i(2,-2): CellState.MINE,
-#	Vector2i(1,-2): CellState.MINE,
-#	Vector2i(0,-2): CellState.MINE,
-#	Vector2i(-1,-2): CellState.MINE,
-#
-#	Vector2i(-1,-1): CellState.EMPTY,
-#	Vector2i(-1,0): CellState.EMPTY,
-#	Vector2i(-1,1): CellState.EMPTY,
-#	Vector2i(0,-1): CellState.EMPTY,
-#	Vector2i(0,0): CellState.EMPTY,
-#	Vector2i(0,1): CellState.EMPTY,
-#	Vector2i(1,-1): CellState.EMPTY,
-#	Vector2i(1,0): CellState.EMPTY,
-#	Vector2i(1,1): CellState.EMPTY,
-#}
 const offsets = [
 	Vector2i(-1,-1),
 	Vector2i(-1,0),
@@ -51,24 +21,45 @@ var cell_scene = preload("res://Scenes/cell.tscn")
 var cell_map = {}
 var pristine: bool = true
 
+#region Compression
+func compress() -> Dictionary:
+	return {
+		"cell_map": cell_map.keys().map(func (key): return [key.x, key.y, cell_map[key].compress()]),  # dict["cell_map"]
+		"pristine": pristine
+	}
 
-const RAD = 0
+func decompress(dict: Dictionary):
+	for arr in dict.cell_map:
+		var loc = Vector2i(arr[0],arr[1])
+		var new_cell = cell_scene.instantiate()
+		new_cell.decompress(loc, arr[2])
+		cell_map[loc] = new_cell
+		add_child(new_cell)
+	# cell_map = dict["cell_map"].map(func (arr): return [key, cell_map[key].compress()]) # dict["cell_map"]
+	pristine = dict["pristine"]
+#endregion
+
+#const RAD = 0
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	for x in range(-RAD, RAD):
-		for y in range(-RAD, RAD):
-			instantiate_cell(Vector2i(x,y))
+#func _ready():
+#	for x in range(-RAD, RAD):
+#		for y in range(-RAD, RAD):
+#			instantiate_cell(Vector2i(x,y))
 
 func instantiate_cell(loc: Vector2i):
 	var child = cell_scene.instantiate()
-	child.init(loc)
+	child.generate(loc)
+	child.position = 16 * loc * res.SIZE
 #	child.mouse_entered_cell.connect(_on_mouse_entered_cell)
 #	child.click.connect(_on_mouse_click)
 	cell_map[loc] = child
 	add_child(child)
 	return child
 
-func getOrNewCell(loc: Vector2i):
+func cell_exists(loc: Vector2i):
+	return cell_map.has(loc)
+
+func get_or_new_cell(loc: Vector2i):
 	if cell_map.has(loc): return cell_map[loc]
 	return instantiate_cell(loc)
 
@@ -81,50 +72,26 @@ func screen_to_cell(event, camera) -> Vector2i:
 func create_landing_area(loc: Vector2i):
 	for offsetx in range(-2,3):
 		for offsety in range(-2,3):
-			getOrNewCell(loc + Vector2i(offsetx, offsety)).is_mine = false
+			get_or_new_cell(loc + Vector2i(offsetx, offsety)).is_mine = false
 
-#func _input(event):
-#	if event is InputEventMouseButton and event.pressed:
-#		var loc = screen_to_cell(event, $Camera)
-#		# print(loc)
-#		# var loc = Vector2i(cellX, cellY)
-#		var locCell = getOrNewCell(loc)
-#		if event.is_action_pressed("left_click"):
-#			if pristine:
-#				create_landing_area(loc)
-#				pristine = false
-#
-#			if locCell.is_flagged: return
-#
-#			if locCell.is_mine: 
-#				locCell.set_costume('mine')
-#			else: 
-#				if not locCell.is_revealed:
-#					flood_fill(loc)
-#				# locCell.set_costume('mine')
-#				# oh no! you lost a heart
-#
-#		elif event.is_action_pressed('right_click'):
-#			if not locCell.is_revealed:
-#				locCell.toggle_flagged()
-#	#		print(hoveringCell.data.number)
-
-func reveal_at(locCell: Cell) -> int:
-	if locCell.is_flagged: return 0
-	if locCell.is_revealed: return 0
+func reveal_at(loc: Vector2i) -> bool:
+	var locCell = get_or_new_cell(loc)
+	if locCell.is_flagged: return false
+	if locCell.is_revealed: return false
 	
 	if pristine:
-		create_landing_area(locCell.cellXY)
+		create_landing_area(loc)
 		pristine = false
 	
 	if locCell.is_mine: 
 		locCell.explode()
-		return -1
+		return true
 	else: 
-		flood_fill(locCell.cellXY)
-		return 0
+		flood_fill(loc)
+		return false
 
-func handle_right_click(locCell: Cell, flags: int) -> int:
+func handle_right_click(loc: Vector2i, flags: int) -> int:
+	var locCell = get_or_new_cell(loc)
 	if locCell.is_revealed: return 0
 	if locCell.is_flagged: locCell.set_flagged(false); return -1
 	if flags == 0: return 0
@@ -141,7 +108,7 @@ func flood_fill(location: Vector2i):
 		var next = queue.pop_front()
 		var nextCell = cell_map[next];  # nextCell.is_revealed = true
 		var neighbors = offsets.map(func(offset): return Vector2i(offset.x + next.x, offset.y + next.y))
-		var mineCount = neighbors.map(func(neighbor): return getOrNewCell(neighbor).is_mine).count(true)
+		var mineCount = neighbors.map(func(neighbor): return get_or_new_cell(neighbor).is_mine).count(true)
 #		if (mineCount != 0):
 #			if nextCell.resource == -1: 
 #				nextCell.openTo(mineCount)
