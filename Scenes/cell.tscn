@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://u5ucf73fqtgv"]
 
-[ext_resource type="Script" path="res://Scripts/Cell_Script.gd" id="1_fklmx"]
 [ext_resource type="Texture2D" uid="uid://bl8abcjgskmeh" path="res://Assets/TileUnknown.png" id="2_514k7"]
-[ext_resource type="Resource" uid="uid://dka5mmg2kldvi" path="res://Resources/CellSharedResources.tres" id="3_a0g2b"]
+[ext_resource type="Script" path="res://Scripts/MinefieldCell.gd" id="2_huunm"]
+[ext_resource type="Resource" uid="uid://dka5mmg2kldvi" path="res://Resources/MinefieldResources.tres" id="3_a0g2b"]
 
 [node name="Cell" type="Sprite2D"]
 texture = ExtResource("2_514k7")
-script = ExtResource("1_fklmx")
+script = ExtResource("2_huunm")
 res = ExtResource("3_a0g2b")

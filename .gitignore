@@ -1,3 +1,4 @@
 .godot
 Assets/*.import
 *.dat
+.gitignore

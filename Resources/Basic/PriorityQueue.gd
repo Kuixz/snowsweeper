@@ -1,5 +1,7 @@
 class_name PriorityQueue
 """
+Thanks to u/bigturtle for the priority queue implementation
+
 Priority Queue. Min heap priority queue that can take a Vector2 and its
 corresponding cost and then always return the Vector2 in it with
 the lowest cost value.
@@ -33,6 +35,8 @@ func empty() -> bool:
 # Dangerous!
 func override_data(arr: Array):
 	self._data = arr
+
+
 
 func _get_parent(index: int) -> int:
 	# warning-ignore:integer_division

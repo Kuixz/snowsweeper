@@ -1,7 +1,6 @@
 extends Resource
 class_name Stylus
 
-
 func save(content: Dictionary):
 	var save_file = FileAccess.open("res://save_game.dat", FileAccess.WRITE)
 	var json_string = JSON.stringify(content)

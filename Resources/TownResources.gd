@@ -1,0 +1,2 @@
+extends GridResource
+class_name TownResources

@@ -1,5 +1,4 @@
-extends Sprite2D
-class_name Cell
+extends GridCell
 
 #signal click(s)
 #signal mouse_entered_cell(s)
@@ -9,11 +8,10 @@ var is_mine: bool
 var is_revealed: bool = false
 var is_flagged: bool = false
 var resource: int = -1
-
 #var data: CellData
 
 #@export var keeper: CellKeeper
-@export var res: CellSharedResources
+#@export var res: MinefieldResources
 
 
 #region Compression
@@ -41,10 +39,7 @@ func decompress(loc: Vector2i, dict: Dictionary):
 func generate(loc):
 	is_mine = randf() < 0.25  # 0.15
 	goto(loc)
-
-func goto(loc):
-	scale = Vector2(res.SIZE, res.SIZE)
-	position = Vector2(loc.x * 16 * res.SIZE, loc.y * 16 * res.SIZE)
+	
 #	data = keeper.get_cell(x, y)
 #	$Sprite2D.texture = resources.textures[data.]
 
@@ -58,9 +53,6 @@ func goto(loc):
 #func _input(event):
 #	if(event is InputEventMouseButton and event.pressed):
 #		click.emit(self)# Replace with function body.
-
-func set_costume(costume_name:String):
-	texture = res.textures[costume_name]
 
 func explode():
 	is_revealed = true

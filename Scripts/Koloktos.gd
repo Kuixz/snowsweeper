@@ -1,4 +1,5 @@
-extends Node
+extends Node  # CompressibleNode, when I start storing file start time. TODO
+class_name Koloktos
 
 var current_time = time()
 var timeouts_queue: PriorityQueue = PriorityQueue.new()
@@ -6,6 +7,9 @@ var timeouts_queue: PriorityQueue = PriorityQueue.new()
 #region Compression
 func compress() -> Array:
 	return timeouts_queue._data
+
+# TODO: This is very efficient, but completely falls apart if wait times change
+# a la efficiency boosts like the Salve Station.
 
 func decompress(arr: Array) -> Array:
 	var i = 0; var n = arr.size()
@@ -28,7 +32,7 @@ func set_timeout(method: String, seconds: float):
 	set_process(true)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	# Getting unix time feels very wrong, but is robust against Engine.timescale and any delta drift.
 	current_time = time()
 	var head = timeouts_queue.head()

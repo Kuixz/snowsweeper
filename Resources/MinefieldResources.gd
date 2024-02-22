@@ -1,7 +1,6 @@
-extends Resource
-class_name CellSharedResources
+extends GridResource
+class_name MinefieldResources
 
-const SIZE = 4
 var textures = {
 	'closed': preload('res://Assets/TileUnknown.png'),
 	# 'open': preload('res://Assets/TileEmpty.png'),

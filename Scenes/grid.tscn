@@ -1,8 +1,33 @@
-[gd_scene load_steps=3 format=3 uid="uid://d2d5vlhltroqt"]
+[gd_scene load_steps=9 format=3 uid="uid://d2d5vlhltroqt"]
 
 [ext_resource type="Script" path="res://Scripts/Grid.gd" id="1_jithm"]
-[ext_resource type="Resource" uid="uid://dka5mmg2kldvi" path="res://Resources/CellSharedResources.tres" id="2_s0u13"]
+[ext_resource type="Script" path="res://Scripts/Minefield.gd" id="2_tollx"]
+[ext_resource type="Resource" uid="uid://dka5mmg2kldvi" path="res://Resources/MinefieldResources.tres" id="2_v5p2u"]
+[ext_resource type="Script" path="res://Scripts/MinefieldCell.gd" id="4_4kdo8"]
+[ext_resource type="Resource" uid="uid://c55thpx148lfl" path="res://Resources/GameState.tres" id="4_q6t1w"]
+[ext_resource type="Script" path="res://Scripts/Town.gd" id="4_quvl3"]
+[ext_resource type="Resource" uid="uid://cjydegskv010i" path="res://Resources/TownResources.tres" id="6_0gknq"]
+[ext_resource type="Script" path="res://Resources/Basic/GridCell.gd" id="8_uli8r"]
 
 [node name="Grid" type="Node"]
 script = ExtResource("1_jithm")
-res = ExtResource("2_s0u13")
+res = ExtResource("2_v5p2u")
+
+[node name="Minefield" type="Node" parent="."]
+script = ExtResource("2_tollx")
+state = ExtResource("4_q6t1w")
+
+[node name="Cell" type="Sprite2D" parent="Minefield"]
+visible = false
+script = ExtResource("4_4kdo8")
+res = ExtResource("2_v5p2u")
+
+[node name="Town" type="Node" parent="."]
+script = ExtResource("4_quvl3")
+state = ExtResource("4_q6t1w")
+res = ExtResource("6_0gknq")
+
+[node name="Cell" type="Sprite2D" parent="Town"]
+script = ExtResource("8_uli8r")
+
+[connection signal="update" from="Minefield" to="." method="_on_minefield_update"]
