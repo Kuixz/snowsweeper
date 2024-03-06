@@ -14,7 +14,7 @@ const offsets = [
 	Vector2i(1,1),
 ]
 
-@export var state: GameState
+#@export var state: GameState
 
 var pristine: bool = true
 
@@ -33,14 +33,14 @@ func decompress(dict: Dictionary):
 func handle_left_click(loc: Vector2i):
 	if has(loc):
 		var locCell = cell_at(loc)
-		if locCell.is_flagged: 
-			print("This is a flag")
-			return
+		#if locCell.is_flagged:  # NOTE: This case is handled in Town.
+			#print("This is a flag")
+			#returna
 		if locCell.is_revealed: 
 			print("This is a " + str(locCell.resource))
 			return
 	
-	if state.lives == 0: return
+	if Global.lives == 0: return
 	
 	var locCell = get_or_new_cell(loc)
 	if pristine:
@@ -54,7 +54,7 @@ func handle_left_click(loc: Vector2i):
 		flood_fill(loc)
 		emit_signal("update", Grid.Update.OPEN)  # TODO
 
-func handle_right_click(loc: Vector2i):
+func handle_right_click(loc: Vector2i):  # TODO move this logic to Town? Or only store the special flags there?
 	if not has(loc): return
 	
 	var locCell = get_or_new_cell(loc)
@@ -62,11 +62,18 @@ func handle_right_click(loc: Vector2i):
 	if locCell.is_flagged: 
 		locCell.set_flagged(false); 
 		emit_signal("update", Grid.Update.UNFLAG)  # TODO
+		#Global.flags += 1
 		return
-	if state.flags == 0: return
+	if Global.flags == 0: return
 	locCell.set_flagged(true)
 	emit_signal("update", Grid.Update.FLAG)  # TODO
+	#Global.flags -= 1
 #endregion
+
+#func register_cell(loc: Vector2i) -> GridCell:
+	#var child = super.register_cell(loc)
+	##child.generate()
+	#return child
 
 func create_landing_area(loc: Vector2i):
 	for offsetx in range(-2,3):

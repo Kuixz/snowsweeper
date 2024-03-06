@@ -1,7 +1,6 @@
-extends Resource
-class_name GameState
+extends Node
 
-#const SIZE = 4
+const SIZE = 4
 
 var lives = 3:
 	set(value):
@@ -34,4 +33,4 @@ func decompress(dict: Dictionary):
 
 func set_ui(u: UILayer):
 	ui = u
-	u.init(self)
+	#u.init()

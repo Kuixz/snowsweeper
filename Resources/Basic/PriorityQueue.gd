@@ -12,6 +12,9 @@ var _data: Array = []
 func head():
 	return self._data[0]
 
+func size():
+	return len(_data)
+
 func insert(element, cost: float) -> void:
 	# Add the element to the bottom level of the heap at the leftmost open space
 	self._data.push_back([cost, element])
@@ -32,14 +35,26 @@ func extract():
 func empty() -> bool:
 	return self._data.is_empty()
 
+
 # Dangerous!
+func find_by(f: Callable):
+	for item in _data:
+		if f.call(item):
+			return item
+
 func override_data(arr: Array):
 	self._data = arr
+
+func erase(item):
+	_data.erase(find_by(func(d): return d[1] == item))
+
+func map(f: Callable) -> Array:
+	return _data.map(func (entry): return f.call(entry[1]))
 
 
 
 func _get_parent(index: int) -> int:
-	# warning-ignore:integer_division
+	@warning_ignore("integer_division")
 	return (index - 1) / 2
 
 func _left_child(index: int) -> int:
@@ -65,7 +80,7 @@ func _down_heap(index: int) -> void:
 	var left_idx: int = self._left_child(index)
 	var right_idx: int = self._right_child(index)
 	var smallest: int = index
-	var size: int = self._data.size()
+	var size: int = size()
 
 	if right_idx < size and self._data[right_idx][0] < self._data[smallest][0]:
 		smallest = right_idx

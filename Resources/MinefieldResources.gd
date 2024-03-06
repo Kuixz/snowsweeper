@@ -1,9 +1,14 @@
 extends GridResource
 class_name MinefieldResources
 
+var subclasses = {
+	"default": MinefieldCell
+}
+
 var textures = {
-	'closed': preload('res://Assets/TileUnknown.png'),
-	# 'open': preload('res://Assets/TileEmpty.png'),
+	'default': preload('res://Assets/TileUnknown.png'),
+	#'closed': preload('res://Assets/TileUnknown.png'),
+	#'open': preload('res://Assets/TileEmpty.png'),
 	'mine': preload('res://Assets/TileExploded.png'),
 	'flag': preload('res://Assets/TileFlag.png'),
 	'0': preload('res://Assets/TileEmpty.png'),

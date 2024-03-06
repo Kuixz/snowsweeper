@@ -1,9 +1,9 @@
-extends CompressibleNode
+extends TimeoutSetter
 
-@export var state: GameState
+#@export var state: GameState
 @export var stylus: Stylus 
 @onready var grid: Grid = $Grid
-@onready var koloktos: Koloktos = $Koloktos
+#@onready var koloktos: Koloktos = $Koloktos
 @onready var camera: Camera2D = $Camera2D
 @onready var ui: UILayer = $UILayer
 
@@ -21,25 +21,22 @@ const new_game = {
 
 #region Compression
 func compress() -> Dictionary:
-	return {
+	var dict = {
 		#"time": Time.get_unix_time_from_system(),
 		#"file_start_time": file_start_time,
-		"global": state.compress(),
+		"global": Global.compress(),
 		"grid": grid.compress(),
-		"koloktos": koloktos.compress()
+		#"chronos": Chronos.compress(),  # TEST
+		"timeouts": pending_timeouts
 	}
+	if len(pending_timeouts) > 0: dict["timeouts"] = pending_timeouts.map(func(x):return x.compress())
+	return dict
 
 func decompress(dict: Dictionary):
 	#file_start_time = dict["file_start_time"]
-	if dict.has("global"): state.decompress(dict["global"])
+	if dict.has("global"): Global.decompress(dict["global"])
 	if dict.has("grid"): grid.decompress(dict["grid"])
-	
-	if dict.has("koloktos"):
-		var while_offline = koloktos.decompress(dict["koloktos"])
-		for item in while_offline:
-			#print(item[1])
-			var callable = Callable(self, item[1])
-			callable.call()
+	if dict.has("timeouts"): decompress_timeouts(dict["timeouts"])  # TODO
 
 func save():
 	stylus.save(compress())
@@ -57,12 +54,7 @@ func _ready():
 	if not data: data = new_game
 	decompress(data)
 	
-	state.set_ui(ui)
-	
-	#print(get_script().get_script_property_list())
-	#koloktos.set_timeout("say_hi", 2)
-	#koloktos.set_timeout("add_life", 5)
-
+	ui.init()
 #endregion
 
 func _input(event):
@@ -83,19 +75,20 @@ func _input(event):
 		stylus.save(compress())
 		print('Saved!')
 
-func add_life():
-	state.lives += 1
+func add_life(lives: int):
+	Global.lives += lives
 	#ui.add_life()
 
 func _on_grid_update(what: Grid.Update):
 	match what:
 		Grid.Update.EXPLODE:
-			state.lives -= 1
-			koloktos.set_timeout("add_life", 21600)  # 6 hours
+			Global.lives -= 1
+			#koloktos.set_timeout("add_life", 21600)  # 6 hours
+			set_timeout("add_life", 21600, 1)
 		Grid.Update.OPEN:
-			state.score += 100
+			Global.score += 100
 		Grid.Update.FLAG:
-			state.flags -= 1
+			Global.flags -= 1
 		Grid.Update.UNFLAG:
-			state.flags += 1
+			Global.flags += 1
 	#pass # Replace with function body.

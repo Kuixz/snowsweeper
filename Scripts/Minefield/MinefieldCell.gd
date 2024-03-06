@@ -1,4 +1,5 @@
 extends GridCell
+class_name MinefieldCell
 
 #signal click(s)
 #signal mouse_entered_cell(s)
@@ -23,22 +24,24 @@ func compress() -> Dictionary:
 		"resource": resource
 	}
 
-func decompress(loc: Vector2i, dict: Dictionary):
-	is_mine = dict["is_mine"]
-	is_revealed = dict["is_revealed"]
-	is_flagged = dict["is_flagged"]
-	resource = dict["resource"]
-	goto(loc)
+func decompress(dict: Dictionary):
+	super.decompress(dict)
+	#is_mine = dict["is_mine"]
+	#is_revealed = dict["is_revealed"]
+	#is_flagged = dict["is_flagged"]
+	#resource = dict["resource"]
+	#goto(loc)
 	
 	if is_flagged: set_costume('flag'); return
-	if not is_revealed: set_costume('closed'); return
+	if not is_revealed: set_costume('default'); return
 	if is_mine: set_costume('mine'); return
 	set_costume(str(resource))
 #endregion
 
-func generate(loc):
-	is_mine = randf() < 0.25  # 0.15
-	goto(loc)
+func _ready():
+	super._ready()
+	is_mine = randf() < 0.21 # 0.25
+	#goto(loc)
 	
 #	data = keeper.get_cell(x, y)
 #	$Sprite2D.texture = resources.textures[data.]
@@ -64,6 +67,6 @@ func openTo(count: int):
 	resource = count
 	set_costume(str(count)) # Technically not necessary, if i remove the typecheck on the other side...
 
-func set_flagged(f: bool):
+func set_flagged(f: bool):  # TODO remove
 	is_flagged = f
-	set_costume('flag' if f else 'closed')
+	set_costume('flag' if f else 'default')

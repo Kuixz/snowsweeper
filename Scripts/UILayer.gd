@@ -3,10 +3,15 @@ class_name UILayer
 
 var hearts = []
 
-func init(state: GameState):
-	update_lives(state.lives)
-	update_flags(state.flags)
-	update_score(state.score)
+#func init(state: GameState):
+	#update_lives(state.lives)
+	#update_flags(state.flags)
+	#update_score(state.score)
+func init():
+	Global.set_ui(self)
+	update_lives(Global.lives)
+	update_flags(Global.flags)
+	update_score(Global.score)
 
 func update_flags(num: int):
 	$TopLeft/FlagCount.text = "x" + str(num)
