@@ -71,3 +71,7 @@ func cell_at_in(loc: Vector2i, layer: String) -> GridCell:
 func erase(loc: Vector2i):
 	cell_map.erase(loc)
 
+func reset():
+	for cell in cell_map:
+		cell_map[cell].queue_free()
+	cell_map = {}

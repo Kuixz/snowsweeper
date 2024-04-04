@@ -4,7 +4,7 @@ extends TimeoutSetter
 @export var stylus: Stylus 
 @onready var grid: Grid = $Grid
 #@onready var koloktos: Koloktos = $Koloktos
-@onready var camera: Camera2D = $Camera2D
+#@onready var camera: Camera2D = $Camera2D
 @onready var ui: UILayer = $UILayer
 
 const new_game = {
@@ -58,22 +58,36 @@ func _ready():
 #endregion
 
 func _input(event):
+	if event is InputEventPanGesture:
+		Camera.scroll(event.delta)
+		grid.handle_mouse_motion(Camera.get_mouse_position())
 	if event is InputEventMouseButton and event.pressed:
-#		print(event)
-		var loc = grid.screen_to_cell(event.position, camera.position)
-		
+		var raw_loc = event.position
 		# Maybe fixed the inappropriate coupling - heart bank what do?
 		if event.is_action_pressed("left_click"):
-			grid.handle_left_click(loc)
+			#grid.handle_left_click(loc)
+			grid.handle_left_click(raw_loc)
 		
 		# Maybe fixed the inappropriate coupling.
 		elif event.is_action_pressed('right_click'):
-			grid.handle_right_click(loc)
+			#grid.handle_right_click(loc)
+			grid.handle_right_click(raw_loc)
 		
+		return
+	if event is InputEventMouseMotion:
+		var raw_loc = event.global_position
+		if not Camera.in_frame(raw_loc): return  # prevent mouse motion function calls when mouse is out of frame
+		#var loc = grid.screen_to_cell(event.position, camera.position)
+		grid.handle_mouse_motion(raw_loc)
 		return
 	if event.is_action_pressed('save'):
 		stylus.save(compress())
 		print('Saved!')
+	
+	if event.is_action_pressed('test'):
+		print('test')
+		grid.build_preview.toggle_build_preview()
+		pass
 
 func add_life(lives: int):
 	Global.lives += lives

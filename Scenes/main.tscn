@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://def1c5e665y15"]
+[gd_scene load_steps=8 format=3 uid="uid://def1c5e665y15"]
 
 [ext_resource type="Script" path="res://Scripts/Main.gd" id="1_he2f1"]
 [ext_resource type="Resource" uid="uid://pivt3f8oic6o" path="res://Resources/Stylus.tres" id="2_1uoby"]
 [ext_resource type="Script" path="res://Scripts/UILayer.gd" id="3_8lg0n"]
 [ext_resource type="Texture2D" uid="uid://qo24rmx8vn3g" path="res://Assets/flag-64.png" id="4_lai14"]
 [ext_resource type="Texture2D" uid="uid://ip7gugr24sk0" path="res://Assets/heart-64.png" id="5_m8iuk"]
-[ext_resource type="Script" path="res://Scripts/Camera.gd" id="6_177ho"]
 [ext_resource type="PackedScene" uid="uid://d2d5vlhltroqt" path="res://Scenes/grid.tscn" id="7_wbwga"]
 
 [sub_resource type="Theme" id="Theme_d7cyc"]
@@ -45,9 +44,6 @@ text = "x10"
 visible = false
 layout_mode = 2
 texture = ExtResource("5_m8iuk")
-
-[node name="Camera2D" type="Camera2D" parent="."]
-script = ExtResource("6_177ho")
 
 [node name="Grid" parent="." instance=ExtResource("7_wbwga")]
 

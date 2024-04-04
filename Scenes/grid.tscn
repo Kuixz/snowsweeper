@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://d2d5vlhltroqt"]
+[gd_scene load_steps=8 format=3 uid="uid://d2d5vlhltroqt"]
 
 [ext_resource type="Script" path="res://Scripts/Grid.gd" id="1_jithm"]
 [ext_resource type="Resource" uid="uid://dka5mmg2kldvi" path="res://Resources/MinefieldResources.tres" id="2_v5p2u"]
 [ext_resource type="Script" path="res://Scripts/Minefield/Minefield.gd" id="3_h66d3"]
 [ext_resource type="Script" path="res://Scripts/Town/Town.gd" id="4_quvl3"]
 [ext_resource type="Resource" uid="uid://cjydegskv010i" path="res://Resources/TownResources.tres" id="6_0gknq"]
+[ext_resource type="Script" path="res://Scripts/BuildPreview.gd" id="6_3dgq7"]
+[ext_resource type="Resource" uid="uid://dnro4tbsqkw7g" path="res://Resources/BuildPreviewResources.tres" id="7_8erqc"]
 
 [node name="Grid" type="Node"]
 script = ExtResource("1_jithm")
@@ -16,6 +18,10 @@ res = ExtResource("2_v5p2u")
 [node name="Town" type="Node" parent="."]
 script = ExtResource("4_quvl3")
 res = ExtResource("6_0gknq")
+
+[node name="BuildPreview" type="Node" parent="."]
+script = ExtResource("6_3dgq7")
+res = ExtResource("7_8erqc")
 
 [connection signal="update" from="Minefield" to="." method="_on_minefield_update"]
 [connection signal="update" from="Town" to="." method="_on_town_update"]
