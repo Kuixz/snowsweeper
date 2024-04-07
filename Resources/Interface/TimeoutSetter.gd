@@ -10,7 +10,7 @@ func decompress_timeouts(arr: Array):
 		var timeout = BatchTimeout.decompress(self, data)
 		var elapsed = timeout.on_deserialize_rebatch(Chronos.current_time)
 		timeout.callback(elapsed)
-		print(timeout.compress())
+		#print(timeout.compress())
 		if timeout.batch_count > 0:
 			push_timeout(timeout)
 
@@ -25,6 +25,7 @@ func push_timeout(timeout: BatchTimeout):
 	pending_timeouts.push_back(timeout)
 	#Chronos.attach(self)
 	#print(pending_timeouts)
+	#pass
 	
 func set_timeout(method: String, seconds: float, batch_count: int = 1, category = "none"):
 	var timeout = BatchTimeout.new(self, batch_count, seconds, Chronos.time() + seconds, method)
@@ -34,16 +35,29 @@ func rebatch_timeout(timeout: BatchTimeout, batches: int):
 	if batches != 0: timeout.batch_count = batches
 	else: pending_timeouts.erase(timeout); Chronos.cancel_timeout(timeout)
 
-func rebatch_timeout_search(method: String, batches: int):
-	for timeout in pending_timeouts:  # This is a little seedy...
+func timeout_of_method(method: String) -> BatchTimeout: 
+	for timeout in pending_timeouts:
 		if timeout.method != method: continue
-		timeout.batch_count = batches
-		return
+		return timeout
+	return null
+
+func has_timeout_of_method(method: String) -> bool:
+	return (timeout_of_method(method) != null)
+
+func rebatch_timeout_search(method: String, batches: int) -> bool:  # Unused.
+	var timeout = timeout_of_method(method)
+	if (timeout == null): return false
+	timeout.batch_count = batches
+	return true
+	#for timeout in pending_timeouts:  # This is a little seedy...
+		#if timeout.method != method: continue
+		#timeout.batch_count = batches
+		#return
 #endregion
 
-func sayhi(times: int):
-	for count in range(0, times):
-		print('hi')
+#func sayhi(times: int):
+	#for count in range(0, times):
+		#print('hi')
 
 
 

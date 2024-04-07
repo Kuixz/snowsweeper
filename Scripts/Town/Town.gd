@@ -1,12 +1,11 @@
 extends GridLayer
 class_name Town
 
-signal update(what: Grid.Update)
+#signal update(what: Grid.Update)
 
-#@export var state: GameState
-#@export var res: TownResources
+@export var building_data: BuildingData
 
-var block_list = []  # [Vector2i, GridCell]
+var block_list = []  # [(Vector2i, GridCell)]
 var global_building_id: int = -1
 
 #region Compression
@@ -31,8 +30,10 @@ func register_cell_oftype(subclass: String, loc: Vector2i) -> GridCell:
 	var child = super.register_cell_oftype(subclass, loc)
 	global_building_id += 1
 	block_list.push_back([loc, child])
-	for x in range(0, child.width):
-		for y in range(0, child.height):
+	
+	var dimensions = building_data.get_dimensions(subclass)
+	for x in range(0, dimensions.x):
+		for y in range(0, dimensions.y):
 			set_cell_at(loc + Vector2i(x, y), global_building_id)
 	return child
 
@@ -46,6 +47,12 @@ func erase(loc: Vector2i):
 		for y in range(0, cell.height):
 			cell_map.erase(loc + Vector2i(x,y))
 	block_list[index] = null  # Danger?
+
+func initialize_cell_oftype(subclass: String, loc: Vector2i) -> GridCell:
+	var new_cell = register_cell_oftype(subclass, loc)
+	if new_cell.has_method("init"):
+		new_cell.init()
+	return new_cell
 
 func handle_left_click(loc: Vector2i) -> bool:
 	if has(loc):
@@ -70,16 +77,5 @@ func handle_right_click(loc: Vector2i) -> bool:
 	#register_cell_oftype("BldgFlag1", loc).init()
 	#cell.init()
 	return false
-
-
-
-
-
-
-
-
-
-
-
 
 

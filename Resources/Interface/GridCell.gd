@@ -1,4 +1,4 @@
-extends CompressibleNode 
+extends TimeoutSetter 
 class_name GridCell
 
 const SIZE = 4
@@ -16,10 +16,11 @@ func compress() -> Dictionary:
 func decompress(dict: Dictionary):
 	#push_warning("Decompress not implemented, using default")
 	for key in dict.keys():
-		if key == "loc":
-			goto(dict["loc"])
+		if key == "pending_timeouts":
+			decompress_timeouts(dict["pending_timeouts"])
 		else: self[key] = dict[key]
 	#goto(loc)
+	#if dict.has("pending_timeouts"): decompress_timeouts(dict["pending_timeouts"])
 #endregion
 
 func _ready():

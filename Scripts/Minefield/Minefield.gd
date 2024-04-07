@@ -30,43 +30,47 @@ func decompress(dict: Dictionary):
 #endregion
 
 #region Control
-func handle_left_click(loc: Vector2i):
+func handle_left_click(loc: Vector2i) -> bool:
+	var locCell = null
+	
 	if has(loc):
-		var locCell = cell_at(loc)
+		locCell = cell_at(loc)
 		#if locCell.is_flagged:  # NOTE: This case is handled in Town.
 			#print("This is a flag")
 			#returna
 		if locCell.is_revealed: 
-			print("This is a " + str(locCell.resource))
-			return
+			locCell.set_harvest()
+			return true
 	
-	if Global.lives == 0: return
+	if Global.lives == 0: return true
 	
-	var locCell = get_or_new_cell(loc)
+	if locCell == null:
+		locCell = get_or_new_cell(loc)  # technically register_cell suffices here
 	if pristine:
 		create_landing_area(loc)
 		pristine = false
-		
 	if locCell.is_mine: 
 		locCell.explode()
 		emit_signal("update", Grid.Update.EXPLODE)  # TODO
 	else: 
 		flood_fill(loc)
 		emit_signal("update", Grid.Update.OPEN)  # TODO
+	return true
 
-func handle_right_click(loc: Vector2i):  # TODO move this logic to Town? Or only store the special flags there?
-	if not has(loc): return
+func handle_right_click(loc: Vector2i) -> bool:  # TODO move this logic to Town? Or only store the special flags there?
+	if not has(loc): return false
 	
 	var locCell = get_or_new_cell(loc)
-	if locCell.is_revealed: return
+	if locCell.is_revealed: return false
 	if locCell.is_flagged: 
 		locCell.set_flagged(false); 
 		emit_signal("update", Grid.Update.UNFLAG)  # TODO
 		#Global.flags += 1
-		return
-	if Global.flags == 0: return
+		return true
+	if Global.flags == 0: return false
 	locCell.set_flagged(true)
 	emit_signal("update", Grid.Update.FLAG)  # TODO
+	return true
 	#Global.flags -= 1
 #endregion
 

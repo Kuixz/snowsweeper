@@ -22,3 +22,10 @@ var textures = {
 	'8': preload('res://Assets/Tile8.png'),
 #	'9': preload('res://Assets/Tile9.png')
 }
+
+const harvest_durations = [
+	0, 0, 0, 60, 900, 7200, 43200, 259200
+]
+
+func get_harvest_duration(resource: int) -> int:
+	return harvest_durations[resource - 1]

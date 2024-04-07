@@ -3,14 +3,17 @@ class_name BldgFlag1
 
 #var subclass = "BldgFlag1"
 
+# TODO TODO TODO TODO TODO. Switch AWAY from this goofy ahh inheritance bs,
+# and into a standardized format.
+
 const duration: int = 300
-const capacity: int = 24  # 24
+const capacity: int = 12  # 24
 var holding: int = 0
 
 #region Compression
 func _ready(): #  init():  #_ready():
-	width = 3
-	height = 3
+	#width = 3
+	#height = 3
 	subclass = "BldgFlag1"
 	super._ready()
 	#sprite.texture = res.textures[subclass]
@@ -22,7 +25,7 @@ func compress() -> Dictionary:
 	return dict
 
 func decompress(dict: Dictionary):
-	if dict.has("holding"): holding += dict["holding"]  # erase me
+	if dict.has("holding"): holding += dict["holding"]  # erase me  # why?
 	super.decompress(dict)
 #endregion
 

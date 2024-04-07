@@ -70,8 +70,13 @@ func handle_mouse_motion(raw_loc: Vector2):
 
 
 
+func construct(building: String, loc: Vector2i):
+	town.initialize_cell_oftype(building, loc)
+
+
+
 func _on_minefield_update(what):
 	emit_signal("update", what)
 
-func _on_town_update(what):
-	emit_signal("update", what)
+#func _on_town_update(what):
+	#emit_signal("update", what)

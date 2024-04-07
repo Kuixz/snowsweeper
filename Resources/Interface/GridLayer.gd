@@ -16,8 +16,10 @@ func decompress(dict: Dictionary):
 	for arr in dict["cell_map"]:
 		var loc = Vector2i(arr[0],arr[1])
 		#register_cell(loc).decompress(loc, arr[2])
-		arr[2]["loc"] = loc
-		register_cell(loc).decompress(arr[2])
+		#arr[2]["loc"] = loc
+		var new_cell = register_cell(loc)
+		#new_cell.goto(loc)
+		new_cell.decompress(arr[2])
 #endregion
 
 #region Control

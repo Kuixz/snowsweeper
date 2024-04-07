@@ -70,3 +70,18 @@ func openTo(count: int):
 func set_flagged(f: bool):  # TODO remove
 	is_flagged = f
 	set_costume('flag' if f else 'default')
+
+
+
+func set_harvest():
+	print("This is a " + str(resource))
+	if resource > 0 and not has_timeout_of_method("harvest"):
+		set_timeout("harvest", res.get_harvest_duration(resource))
+
+func harvest(_cycles: int):
+	print("Harvested a " + str(resource))
+	#print(Inventory.table)
+	Inventory.harvest(resource)
+	#print(Inventory.counts)
+	resource = 0
+	set_costume('0')

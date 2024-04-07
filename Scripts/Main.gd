@@ -25,6 +25,7 @@ func compress() -> Dictionary:
 		#"time": Time.get_unix_time_from_system(),
 		#"file_start_time": file_start_time,
 		"global": Global.compress(),
+		"inventory": Inventory.compress(),
 		"grid": grid.compress(),
 		#"chronos": Chronos.compress(),  # TEST
 		"timeouts": pending_timeouts
@@ -35,6 +36,7 @@ func compress() -> Dictionary:
 func decompress(dict: Dictionary):
 	#file_start_time = dict["file_start_time"]
 	if dict.has("global"): Global.decompress(dict["global"])
+	if dict.has("inventory"): Inventory.decompress(dict["inventory"])
 	if dict.has("grid"): grid.decompress(dict["grid"])
 	if dict.has("timeouts"): decompress_timeouts(dict["timeouts"])  # TODO
 
