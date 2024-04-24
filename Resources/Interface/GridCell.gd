@@ -1,9 +1,25 @@
-extends TimeoutSetter 
+extends BatchTimeoutSetter 
 class_name GridCell
 
 const SIZE = 4
 var sprite: Sprite2D
 var res: GridResource
+
+var position: Vector2:
+	set(pos):
+		sprite.position = pos
+	get:
+		return sprite.position
+var _scale: Vector2:
+	set(sca):
+		sprite.scale = sca
+	get:
+		return sprite.scale
+var _texture: Texture2D:
+	set(text):
+		sprite.texture = text
+	get:
+		return sprite.texture
 
 #region Compression
 func compress() -> Dictionary:
@@ -28,12 +44,12 @@ func _ready():
 	sprite = Sprite2D.new()
 	#sprite.visible = false
 	add_child(sprite)
-	if res.textures.has("default"): sprite.texture = res.textures["default"]
+	if res.textures.has("default"): _texture = res.textures["default"]
 
 func goto(loc: Vector2i):
-	sprite.scale = Vector2(SIZE, SIZE)
-	sprite.position = loc * 16 * SIZE
+	position = loc * 16 * SIZE
+	_scale = Vector2(SIZE, SIZE)
 	#sprite.visible = true 
 
 func set_costume(costume_name:String):
-	sprite.texture = res.textures[costume_name]
+	_texture = res.textures[costume_name]

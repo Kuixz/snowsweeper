@@ -26,6 +26,10 @@ enum MATERIALS {
 	DRILL
 }
 
+#enum BUILDINGS {
+	#BLDGFLAG1
+#}
+
 var numbered_materials = [
 	null,
 	MATERIALS.STONE,
@@ -72,8 +76,8 @@ func add_material(material: MATERIALS, count: int):
 	#counts[material - 1] += count
 	print(counts)
 
-func harvest(number: int):
-	add_material(numbered_materials[number], 1)
+func harvest(number: int, count: int = 1):
+	add_material(numbered_materials[number], count)
 
 
 

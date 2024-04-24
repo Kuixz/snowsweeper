@@ -1,10 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://u5ucf73fqtgv"]
+[gd_scene load_steps=2 format=3 uid="uid://u5ucf73fqtgv"]
 
 [ext_resource type="Script" path="res://Scripts/Minefield/MinefieldCell.gd" id="2_huunm"]
-[ext_resource type="Resource" uid="uid://dka5mmg2kldvi" path="res://Resources/MinefieldResources.tres" id="3_a0g2b"]
 
-[node name="Cell" type="Node"]
+[node name="Cell" type="Node2D"]
 script = ExtResource("2_huunm")
-res = ExtResource("3_a0g2b")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

@@ -19,6 +19,9 @@ func compress() -> Dictionary:
 	return dict
 
 #func decompress(dict: Dictionary):
+	#super.decompress(dict)
+	#for timeout in pending_timeouts:
+		#print(timeout.batch_count)
 	#if dict.has("pending_timeouts"): decompress_timeouts(dict["pending_timeouts"])
 
 func _ready():

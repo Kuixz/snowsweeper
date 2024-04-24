@@ -24,7 +24,7 @@ var textures = {
 }
 
 const harvest_durations = [
-	0, 0, 0, 60, 900, 7200, 43200, 259200
+	0, 0, 30, 480, 1200, 7200, 43200, 259200
 ]
 
 func get_harvest_duration(resource: int) -> int:

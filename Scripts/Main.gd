@@ -1,4 +1,5 @@
-extends TimeoutSetter
+extends BatchTimeoutSetter
+#extends TimeoutSetter
 
 #@export var state: GameState
 @export var stylus: Stylus 
@@ -27,7 +28,7 @@ func compress() -> Dictionary:
 		"global": Global.compress(),
 		"inventory": Inventory.compress(),
 		"grid": grid.compress(),
-		#"chronos": Chronos.compress(),  # TEST
+		#"chronos": Chronos.compress(),
 		"timeouts": pending_timeouts
 	}
 	if len(pending_timeouts) > 0: dict["timeouts"] = pending_timeouts.map(func(x):return x.compress())

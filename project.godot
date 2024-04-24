@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Chronos="*res://Resources/Singleton/Chronos.gd"
+Chronos="res://Resources/Singleton/Chronos.gd"
 Global="*res://Resources/Singleton/Global.gd"
 Camera="*res://Resources/Singleton/Camera.gd"
 Inventory="*res://Resources/Singleton/Inventory.gd"

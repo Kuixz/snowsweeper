@@ -1,0 +1,51 @@
+[gd_scene load_steps=4 format=3 uid="uid://deo5jntkv36st"]
+
+[ext_resource type="Texture2D" uid="uid://bgomy00doy4jo" path="res://Assets/circle.png" id="1_dnm76"]
+[ext_resource type="Script" path="res://Scripts/ProgressCircle.gd" id="1_mdeb4"]
+
+[sub_resource type="Theme" id="Theme_gpabv"]
+default_font_size = 14
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_mdeb4")
+
+[node name="ProgressCircle" type="TextureProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+value = 40.0
+fill_mode = 4
+texture_under = ExtResource("1_dnm76")
+texture_progress = ExtResource("1_dnm76")
+tint_under = Color(0.258824, 0.258824, 0.258824, 0.588235)
+tint_progress = Color(0.87451, 0.87451, 0.87451, 0.588235)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -66.0
+offset_top = -8.5
+offset_right = 66.0
+offset_bottom = 8.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_gpabv")
+text = "NaN : NaN : NaN : NaN"
+horizontal_alignment = 1

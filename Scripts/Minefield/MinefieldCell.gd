@@ -17,12 +17,14 @@ var resource: int = -1
 
 #region Compression
 func compress() -> Dictionary:
-	return {
+	var dict = {
 		"is_mine": is_mine,
 		"is_revealed": is_revealed,
 		"is_flagged": is_flagged,
 		"resource": resource
 	}
+	if len(pending_timeouts) > 0: dict["pending_timeouts"] = pending_timeouts.map(func(x):return x.compress())
+	return dict
 
 func decompress(dict: Dictionary):
 	super.decompress(dict)
@@ -75,13 +77,15 @@ func set_flagged(f: bool):  # TODO remove
 
 func set_harvest():
 	print("This is a " + str(resource))
+	#print(has_timeout_of_method("harvest"))
 	if resource > 0 and not has_timeout_of_method("harvest"):
+		print("set")
 		set_timeout("harvest", res.get_harvest_duration(resource))
 
-func harvest(_cycles: int):
+func harvest(cycles: int = 1):
 	print("Harvested a " + str(resource))
 	#print(Inventory.table)
-	Inventory.harvest(resource)
+	Inventory.harvest(resource, cycles)
 	#print(Inventory.counts)
 	resource = 0
 	set_costume('0')
